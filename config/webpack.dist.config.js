@@ -35,13 +35,6 @@ const webpackConfig = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      components: path.join(__dirname, '../src/components'),
-      images: path.join(__dirname, '../res/images'),
-      pages: path.join(__dirname, '../src/pages'),
-      localData: path.join(__dirname, '../src/testdata/localdata'),
-      mockData: path.join(__dirname, '../src/testdata/mockdata'),
-      util: path.join(__dirname, '../src/utils'),
-      store: path.join(__dirname, '../src/store'),
       jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.min.js')
     }
   },
