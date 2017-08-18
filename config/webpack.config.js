@@ -30,10 +30,7 @@ const webpackConfig = {
   cache: true,
   devtool: 'inline-source-map',
   resolve: {
-    extensions: ['.js', '.jsx'],
-    alias: {
-      jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.min.js')
-    }
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
