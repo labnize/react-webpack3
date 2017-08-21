@@ -2,7 +2,7 @@
 
 ```bash
 git clone https://github.com/labnize/react-webpack3.git
-cd react-router-antd-webpack-gulp
+cd react-webpack3
 npm install
 ```
 
