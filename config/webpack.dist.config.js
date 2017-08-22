@@ -23,17 +23,27 @@ if (pkg.theme && typeof (pkg.theme) === 'string') {
 const webpackConfig = {
   entry: {
     app: path.join(__dirname, '../src/main.jsx'),
-    vendors: ['react', 'react-dom', 'react-router', 'mobx']
+    vendor: ['react', 'react-dom', 'react-router', 'mobx']
   },
   output: {
     path: path.join(__dirname, '../build'),
-    filename: '[name].[hash].js',
+    filename: '[name].[chunkhash].js',
     publicPath: '/'
   },
   cache: false,
   devtool: false,
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      components: path.join(__dirname, '../src/components'),
+      images: path.join(__dirname, '../res/images'),
+      pages: path.join(__dirname, '../src/pages'),
+      localData: path.join(__dirname, '../src/testdata/localdata'),
+      mockData: path.join(__dirname, '../src/testdata/mockdata'),
+      util: path.join(__dirname, '../src/utils'),
+      store: path.join(__dirname, '../src/store'),
+      jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.min.js')
+    }
   },
   module: {
     rules: [
@@ -44,10 +54,7 @@ const webpackConfig = {
             loader: 'react-hot-loader'
           },
           {
-            loader: 'babel-loader',
-            options: {
-              presets: ['env']
-            }
+            loader: 'babel-loader'
           }
         ],
         exclude: /node_modules/
@@ -80,8 +87,9 @@ const webpackConfig = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
+    new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['common', 'vendors'],
+      name: ['vendor', 'common'],
       minChunks: 2
     }),
     new ExtractTextPlugin({
