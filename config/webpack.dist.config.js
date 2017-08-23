@@ -23,7 +23,7 @@ if (pkg.theme && typeof (pkg.theme) === 'string') {
 const webpackConfig = {
   entry: {
     app: path.join(__dirname, '../src/main.jsx'),
-    vendor: ['react', 'react-dom', 'react-router', 'mobx', 'jquery']
+    vendor: ['react', 'react-dom', 'react-router', 'mobx', 'mobx-react', 'jquery', 'echarts', 'mockjs']
   },
   output: {
     path: path.join(__dirname, '../build'),
@@ -93,7 +93,7 @@ const webpackConfig = {
       minChunks: 2
     }),
     new ExtractTextPlugin({
-      filename: 'styles.[hash].css',
+      filename: 'styles.[chunkhash].css',
       disable: false,
       allChunks: true
     }),
