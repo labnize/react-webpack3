@@ -93,7 +93,7 @@ const webpackConfig = {
       minChunks: 2
     }),
     new ExtractTextPlugin({
-      filename: 'styles.[chunkhash].css',
+      filename: 'styles.[contenthash].css',
       disable: false,
       allChunks: true
     }),
