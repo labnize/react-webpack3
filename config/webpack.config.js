@@ -2,21 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const fs = require('fs');
-
-const pkgPath = path.join(__dirname, '../package.json');
-const pkg = fs.existsSync(pkgPath) ? require(pkgPath) : {};
-let theme = {};
-if (pkg.theme && typeof (pkg.theme) === 'string') {
-  let cfgPath = pkg.theme;
-  if (cfgPath.charAt(0) === '.') {
-    cfgPath = resolve(args.cwd, cfgPath);
-  }
-  const getThemeConfig = require(cfgPath);
-  theme = getThemeConfig();
-} else if (pkg.theme && typeof (pkg.theme) === 'object') {
-  theme = pkg.theme;
-}
+const theme = require('./antd.theme');
 
 const webpackConfig = {
   entry: {
@@ -30,7 +16,17 @@ const webpackConfig = {
   cache: true,
   devtool: 'inline-source-map',
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      components: path.join(__dirname, '../src/components'),
+      images: path.join(__dirname, '../res/images'),
+      pages: path.join(__dirname, '../src/pages'),
+      localData: path.join(__dirname, '../src/testdata/localdata'),
+      mockData: path.join(__dirname, '../src/testdata/mockdata'),
+      util: path.join(__dirname, '../src/utils'),
+      store: path.join(__dirname, '../src/store'),
+      jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.min.js')
+    }
   },
   module: {
     rules: [
@@ -41,10 +37,7 @@ const webpackConfig = {
             loader: 'react-hot-loader'
           },
           {
-            loader: 'babel-loader',
-            options: {
-              presets: ['env']
-            }
+            loader: 'babel-loader'
           }
         ],
         exclude: /node_modules/
@@ -57,26 +50,30 @@ const webpackConfig = {
         ]
       },
       {
-        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
+        test: /\.(png|jpg|gif)$/,
         use: ['url-loader?limit=1&name=images/[name].[hash:8].[ext]']
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        use: ['url-loader?limit=1&name=iconfont/[name].[hash:8].[ext]']
       },
       {
         test(file) {
           return /\.less$/.test(file) && !/\.module\.less$/.test(file);
         },
         use: ExtractTextPlugin.extract(
-          'css-loader?sourceMap&-autoprefixer!' +
-          `less-loader?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}`
-        )
+                    'css-loader?sourceMap&-autoprefixer!' +
+                    `less-loader?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}`
+                )
       }
     ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin({
-      filename: 'styles.[hash].css',
+      filename: 'styles.[contenthash].css',
       disable: false,
-      allChunks: true
+      allChunks: false
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.ProvidePlugin({
